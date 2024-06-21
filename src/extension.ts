@@ -1,8 +1,7 @@
 import * as vscode from "vscode";
+import { sep, join, parse } from "path";
 
 export function activate(context: vscode.ExtensionContext) {
-    console.log("WORKINGS!");
-    vscode.window.showInformationMessage("WORKINGS!");
     const disposable = vscode.commands.registerCommand(
         "code-test-jumper.navigateToTest",
         () => {
@@ -15,14 +14,18 @@ export function activate(context: vscode.ExtensionContext) {
             const filePath = editor.document.uri.fsPath;
             let newFilePath;
 
-            if (filePath.includes("/src/")) {
-                newFilePath = filePath
-                    .replace("/src/", "/spec/")
-                    .replace(/\.tsx?$/, ".spec.ts");
-            } else if (filePath.includes("/spec/")) {
-                newFilePath = filePath
-                    .replace("/spec/", "/src/")
-                    .replace(/\.spec\.tsx?$/, ".ts");
+            if (filePath.includes("src" + sep)) {
+                const { dir, name, ext } = parse(filePath);
+                const a = new RegExp(`${sep}src(?!.*${sep}src)`);
+                const b = `${sep}spec`;
+                const c = dir.replace(a, b);
+                newFilePath = join(c, `${name}.test${ext}`);
+            } else if (filePath.includes("spec" + sep)) {
+                const { dir, name, ext } = parse(filePath);
+                newFilePath = join(
+                    dir.replace("spec" + sep, "src" + sep),
+                    name.replace(".test", "") + ext,
+                );
             } else {
                 vscode.window.showInformationMessage(
                     "File not in src or spec directory",
