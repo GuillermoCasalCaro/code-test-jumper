@@ -18,11 +18,11 @@ export function activate(context: vscode.ExtensionContext) {
             if (filePath.includes("/src/")) {
                 newFilePath = filePath
                     .replace("/src/", "/spec/")
-                    .replace(/\.tsx?$/, ".spec.tsx");
+                    .replace(/\.tsx?$/, ".spec.ts");
             } else if (filePath.includes("/spec/")) {
                 newFilePath = filePath
                     .replace("/spec/", "/src/")
-                    .replace(/\.spec\.tsx?$/, ".tsx");
+                    .replace(/\.spec\.tsx?$/, ".ts");
             } else {
                 vscode.window.showInformationMessage(
                     "File not in src or spec directory",
