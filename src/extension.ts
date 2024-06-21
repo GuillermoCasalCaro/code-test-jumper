@@ -2,8 +2,9 @@ import * as vscode from "vscode";
 
 export function activate(context: vscode.ExtensionContext) {
     console.log("WORKINGS!");
+    vscode.window.showInformationMessage("WORKINGS!");
     const disposable = vscode.commands.registerCommand(
-        "extension.navigateToTest",
+        "code-test-jumper.navigateToTest",
         () => {
             const editor = vscode.window.activeTextEditor;
             if (!editor) {
@@ -34,7 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
                 (doc) => {
                     vscode.window.showTextDocument(doc);
                 },
-                (err) => {
+                (_err) => {
                     vscode.window.showInformationMessage(
                         "Corresponding file not found",
                     );
